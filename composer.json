@@ -15,6 +15,7 @@
     "require-dev": {
         "phpunit/phpunit": "^7.5"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Xml\\": "src/Xml"
