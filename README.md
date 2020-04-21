@@ -139,3 +139,6 @@ Output file:
     </baseWrap>
 </data>
 ```
+
+## License
+MIT license.
