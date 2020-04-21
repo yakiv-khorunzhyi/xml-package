@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <items>
+        <item>
+            <name>Yakov</name>
+            <surname>Khorunzhyi</surname>
+            <age>25</age>
+            <images id="photo">
+                <image id="someId">image1</image>
+                <image id="someId2">image2</image>
+                <image>image3</image>
+                <image>image4</image>
+            </images>
+        </item>
+    </items>
+</data>
