@@ -9,17 +9,20 @@ $ composer require yakiv-khorunzhyi/xml-pack
 
 ## Examples
 ##### For reading:
+Create a reader object:
 ```
-// Create a reader object:
 $reader = new Xml\XMLR();
-
-// Specify the path to the file from which you want to receive data:
+```
+Specify the path to the file from which you want to receive data:
+```
 $reader->setFilePath(__DIR__ . '/files/test.xml');
-
-// Indicate nesting of cyclic elements:
+```
+Indicate nesting of cyclic elements:
+```
 $reader->setDepth('/data/items/item');
-
-// Specify aliases and tag paths:
+```
+Specify aliases and tag paths:
+```
 $reader->setSchema([
     'name' => '/name',
     'surname' => '/surname',
@@ -28,8 +31,9 @@ $reader->setSchema([
     'imagesId' => '/images/@id',
     'imageId' => '/images/image/@id',
 ]);
-
-// Array for all data in the file
+```
+Retrieving data:
+```
 $all = [];
 foreach ($reader->getPart() as $part) {
     // You can get data by alias
