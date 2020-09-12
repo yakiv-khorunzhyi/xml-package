@@ -14,7 +14,7 @@ $ composer require yakiv-khorunzhyi/xml-package
 ```
 
 ## More resources:
-* [Documentation](https://github.com/yakiv-khorunzhyi/xml-package/decs/doc.rst)
+* [Documentation](https://github.com/yakiv-khorunzhyi/xml-package/blob/master/docs/doc.md)
 
 ## License
-[MIT license.](https://github.com/yakiv-khorunzhyi/xml-package/LICENSE)
+[MIT license.](https://github.com/yakiv-khorunzhyi/xml-package/blob/master/LICENSE)
