@@ -1,12 +1,12 @@
 <?php
 
-namespace Xml;
+namespace Y\Xml;
 
 /**
- * Class XMLR (XML Reader)
- * @package Xml
+ * Class Reader
+ * @package Y\Xml
  */
-class XMLR
+class Reader
 {
     /** @var string[] $elements */
     private $elements;
@@ -23,9 +23,10 @@ class XMLR
     /**
      * Sets the structure of an xml document
      *
-     * @param string[] $elements , example: ['name' => '/name', 'id' => '/name/@id']
+     * @param string[] $elements
      *
      * @return $this
+     * @example ['name' => '/name', 'id' => '/name/@id']
      */
     public function setSchema($elements)
     {
@@ -37,9 +38,10 @@ class XMLR
     /**
      * Sets the base depth of elements
      *
-     * @param string $depth , example: '/data/items/item'
+     * @param string $depth
      *
      * @return $this
+     * @example '/data/items/item'
      */
     public function setDepth($depth)
     {
@@ -63,18 +65,18 @@ class XMLR
     }
 
     /**
-     * Get part of the xml document
+     * Get items of the xml document
      * @return \Generator
      */
-    public function getPart()
+    public function get()
     {
-        $reader = new \XMLReader();
-        $xmlPart = new XmlPart();
-        $part = [];
+        $reader  = new \XMLReader();
+        $xmlItem = new Item();
+        $data    = [];
 
-        $elements = &$this->elements;
+        $elements    = &$this->elements;
         $elementPath = &$this->elementPath;
-        $depth = &$this->depth;
+        $depth       = &$this->depth;
 
         foreach ($elements as $key => &$value) {
             $value = "{$depth}{$value}";
@@ -83,56 +85,67 @@ class XMLR
         $reader->open($this->filePath);
 
         while ($reader->read()) {
-            // 1 add element to path, 1 - XMLReader::ELEMENT
+            // add element to path, 1 - XMLReader::ELEMENT
             if ($reader->nodeType == 1) {
                 $elementPath .= "/{$reader->name}";
             }
 
-            // 2 handle value, 2 - XMLReader::ATTRIBUTE, 3 - XMLReader::TEXT, 4 - XMLReader::CDATA
+            // handle value, 2 - XMLReader::ATTRIBUTE, 3 - XMLReader::TEXT, 4 - XMLReader::CDATA
             if ($reader->nodeType == 2 || $reader->nodeType == 3 || $reader->nodeType == 4) {
                 if ($elementName = array_search($elementPath, $elements)) {
-                    $part[$elementName][] = $reader->value;
+                    $data[$elementName][] = $reader->value;
                 }
             }
-            // end handle value
 
-            // 3 handle attributes
+            // handle attributes
             if ($reader->nodeType == 1 && $reader->hasAttributes) {
-
                 while ($reader->moveToNextAttribute()) {
                     $elementPath .= "/@{$reader->name}";
 
-                    // 4 handle value, 2 - XMLReader::ATTRIBUTE, 3 - XMLReader::TEXT, 4 - XMLReader::CDATA
+                    // handle value, 2 - XMLReader::ATTRIBUTE, 3 - XMLReader::TEXT, 4 - XMLReader::CDATA
                     if ($reader->nodeType == 2 || $reader->nodeType == 3 || $reader->nodeType == 4) {
                         if ($elementName = array_search($elementPath, $elements)) {
-                            $part[$elementName][] = $reader->value;
+                            $data[$elementName][] = $reader->value;
                         }
                     }
-                    // end handle value
 
                     $elementPath = substr($elementPath, 0, strrpos($elementPath, '/'));
                 }
 
                 $reader->moveToElement();
             }
-            // end handle attributes
 
-            // 5 remove element, 15 - XMLReader::END_ELEMENT
+            // remove element, 15 - XMLReader::END_ELEMENT
             if ($reader->nodeType == 15 || $reader->isEmptyElement) {
                 $elementPath = substr($elementPath, 0, strrpos($elementPath, '/'));
             }
-            // end remove element
 
-            // 6 get part
+            // get xml item
             if ("{$elementPath}/{$reader->name}" == $depth) {
-                $xmlPart->setPart($part);
-                $part = [];
+                $xmlItem->setData($data);
+                $data = [];
 
-                yield $xmlPart;
+                yield $xmlItem;
             }
-            // end get part
         }
 
         $reader->close();
+    }
+
+    /**
+     * Return all xml items as array
+     * @return array
+     */
+    public function getAll()
+    {
+        $reader = $this;
+        $items  = [];
+
+        /** @var \Y\Xml\Item $item */
+        foreach ($reader->get() as $item) {
+            $items[] = $item->getAll();
+        }
+
+        return $items;
     }
 }

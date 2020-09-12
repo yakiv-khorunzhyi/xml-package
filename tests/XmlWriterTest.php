@@ -1,28 +1,24 @@
 <?php
 
-namespace tests;
-
-use PHPUnit\Framework\TestCase;
-use Xml\XMLW;
-
-class TestXMLW extends TestCase
+final class XmlWriterTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \Y\Xml\Writer */
     protected static $writer;
 
     protected static $resultStr = '<?xml version="1.0" encoding="UTF-8"?><data><baseWrap><items id="someId" name="someName"><item attr="itemAttr"><name id="someId" attr="someAttr">Yakiv</name><images><image>https://www.google.com</image><image>https://yandex.ru</image></images></item></items></baseWrap></data>';
 
-    protected static $filePath = __DIR__ . '/files/testWrite.xml';
+    protected static $filePath = __DIR__ . '/../files/test2.xml';
 
-    public static function setUpBeforeClass(): void
+    public static function setUpBeforeClass()
     {
-        self::$writer = new XMLW();
+        self::$writer = new \Y\Xml\Writer();
 
         self::$writer
             ->setFilePath(self::$filePath)
             ->setParameters([
-                'root' => 'data',
-                'node' => 'node',
-                'version' => '1.0',
+                'root'     => 'data',
+                'node'     => 'node',
+                'version'  => '1.0',
                 'encoding' => 'UTF-8',
             ]);
     }
@@ -34,7 +30,7 @@ class TestXMLW extends TestCase
         self::$writer->wrap('baseWrap');
 
         self::$writer->wrap('items', [
-            'id' => 'someId',
+            'id'   => 'someId',
             'name' => 'someName',
         ]);
 
@@ -54,11 +50,11 @@ class TestXMLW extends TestCase
     {
         return [
             'item' => [
-                '@attr' => 'itemAttr',
-                'name' => [
-                    '@id' => "someId",
+                '@attr'  => 'itemAttr',
+                'name'   => [
+                    '@id'   => "someId",
                     '@attr' => "someAttr",
-                    '=' => "Yakiv",
+                    '='     => "Yakiv",
                 ],
                 'images' => [
                     'image' => [
@@ -70,7 +66,7 @@ class TestXMLW extends TestCase
         ];
     }
 
-    public static function tearDownAfterClass(): void
+    public static function tearDownAfterClass()
     {
         self::$writer = null;
     }

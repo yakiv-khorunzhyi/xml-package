@@ -1,12 +1,12 @@
 <?php
 
-namespace Xml;
+namespace Y\Xml;
 
 /**
- * Class XMLW (XML Writer)
- * @package Xml
+ * Class Writer
+ * @package Y\Xml
  */
-class XMLW
+class Writer
 {
     /** @var XMLWriter */
     private $writer;
@@ -38,9 +38,10 @@ class XMLW
     /**
      * Set options for xml file
      *
-     * @param array $params , example: ['root' => 'data','node' => 'node','version' => '1.0','encoding' => 'UTF-8']
+     * @param array $params
      *
      * @return $this
+     * @example ['root' => 'data','node' => 'node','version' => '1.0','encoding' => 'UTF-8']
      */
     public function setParameters($params)
     {
@@ -57,10 +58,10 @@ class XMLW
      */
     private function setDefaultParameters()
     {
-        $this->version = $this->version ?: '1.0';
+        $this->version  = $this->version ?: '1.0';
         $this->encoding = $this->encoding ?: 'UTF-8';
-        $this->root = $this->root ?: 'data';
-        $this->node = $this->node ?: 'node';
+        $this->root     = $this->root ?: 'data';
+        $this->node     = $this->node ?: 'node';
     }
 
     /**
@@ -129,7 +130,7 @@ class XMLW
         }
 
         $tags = array_reverse(array_column($wrapTagsWithAttr, 'tag'));
-        $str = '</' . implode('></', $tags) . '>';
+        $str  = '</' . implode('></', $tags) . '>';
 
         file_put_contents(
             $this->filePath,
@@ -158,7 +159,7 @@ class XMLW
     /**
      * Base tags
      *
-     * @param $tag
+     * @param       $tag
      * @param array $attrs
      *
      * @return $this
@@ -166,7 +167,7 @@ class XMLW
     public function wrap($tag, $attrs = [])
     {
         $this->tags[] = [
-            'tag' => $tag,
+            'tag'   => $tag,
             'attrs' => $attrs,
         ];
 
@@ -216,7 +217,7 @@ class XMLW
     /**
      * The function of recursively converting an array to a xml
      *
-     * @param array $data
+     * @param array       $data
      * @param string|null $parrent
      */
     protected function convert(&$writer, &$data, $parrent = null)
@@ -241,7 +242,9 @@ class XMLW
             }
 
             if (is_array($val)) {
-                foreach ($val as $firstKey => &$unused) break;
+                foreach ($val as $firstKey => &$unused) {
+                    break;
+                }
 
                 if (is_numeric($firstKey)) {
                     $this->convert($writer, $val, $key);

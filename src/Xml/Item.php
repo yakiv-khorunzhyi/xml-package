@@ -1,29 +1,29 @@
 <?php
 
-namespace Xml;
+namespace Y\Xml;
 
 /**
- * Class XmlPart
- * @package Xml
+ * Class Item
+ * @package Y\Xml
  */
-class XmlPart
+class Item
 {
-    /** @var string[] $part */
-    private $part;
+    /** @var string[] $data */
+    private $data;
 
     /**
-     * @param string[] $part
+     * @param string[] $data
      *
      * @return void
      */
-    public function setPart($part)
+    public function setData($data)
     {
-        foreach ($part as &$item) {
-            if (sizeof($item) == 1) {
+        foreach ($data as &$item) {
+            if (count($item) === 1) {
                 $item = $item[0];
             }
         }
-        $this->part = $part;
+        $this->data = $data;
     }
 
     /**
@@ -35,7 +35,11 @@ class XmlPart
      */
     public function __get($key)
     {
-        return $this->part[$key] ?? null;
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
+        }
+
+        return null;
     }
 
     /**
@@ -47,7 +51,11 @@ class XmlPart
      */
     public function get($key)
     {
-        return $this->part[$key] ?? null;
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
+        }
+
+        return null;
     }
 
     /**
@@ -56,6 +64,6 @@ class XmlPart
      */
     public function getAll()
     {
-        return $this->part;
+        return $this->data;
     }
 }
