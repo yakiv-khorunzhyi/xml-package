@@ -16,23 +16,25 @@ $reader->setDepth('/data/items/item');
 Specify aliases and tag paths:
 ```
 $reader->setSchema([
-    'name' => '/name',
-    'surname' => '/surname',
-    'age' => '/age',
-    'images' => '/images/image',
+    'name'     => '/name',
+    'surname ' => '/surname',
+    'age'      => '/age',
+    'images'   => '/images/image',
     'imagesId' => '/images/@id',
-    'imageId' => '/images/image/@id',
+    'imageId'  => '/images/image/@id',
 ]);
 ```
 Retrieving data for big xml files:
 ```
 $all = [];
-foreach ($reader->get() as $part) {
+
+/** @var \Y\Xml\XmlItem $item */
+foreach ($reader->get() as $item) {
     // You can get data by alias
-    $name = $part->get('name');    // | $name = $part->name;
+    $name = $item->get('name');    // | $name = $item->name;
 
     // Or get all the data that you specified in the scheme
-    $all[] = $part->getAll();
+    $all[] = $item->getAll();
 }
 
 // OR for small files
@@ -58,7 +60,7 @@ An example is given for a file of type:
 ##### For writing:
 Create a writer object:
 ```
-$writer = new \Y\Xml\XMLW();
+$writer = new \Y\Xml\Writer();
 ```
 Set the path where the file will be written:
 ```
@@ -84,7 +86,7 @@ $writer->wrap('baseWrap');
 To wrap data in a base tag with attributes:
 ```
 $writer->wrap('items', [
-    'id' => 'someId',
+    'id'   => 'someId',
     'name' => 'someName',
 ]);
 ```
@@ -94,10 +96,10 @@ You can use it just 'name' => 'Test' for type value, but then you cannot use att
 $arr = [
    'item' => [
        '@attr' => 'itemAttr',
-       'name' => [
-           '@id' => "someId",
+       'name'  => [
+           '@id'   => "someId",
            '@attr' => "someAttr",
-           '=' => "Yakiv",
+           '='     => "Yakiv",
        ],
        'images' => [
            'image' => [
