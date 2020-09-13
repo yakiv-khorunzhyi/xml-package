@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author       Yakiv Khorunzhyi
+ * @copyright    2020
+ * @license      MIT
+ */
+
 namespace Y\Xml;
 
 /**
